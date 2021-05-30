@@ -1,0 +1,104 @@
+#Daily Caloric Intake Calculator For Maintenence 
+
+def main():
+    welcome()
+    gender = sex()
+    weight = get_weight()
+    height = get_height()
+    age = get_age()
+    resting_bmr = calculate_bmr(gender, weight, height, age) #calcluates resting bmr
+    final_calculation(resting_bmr)
+
+def welcome():
+    print("Calculate your Basal Metabolic Rate (BMR)!\nFind out how many daily calories you need to maintain your current body weight.\n")
+
+#calculate total daily calories based on bmr and and activity level
+def final_calculation(resting_bmr):
+    user_activity_lvl = get_user_activity()#ask for user activity level
+    maintain = {"sedentary" : get_sedentary(resting_bmr) , "light" : get_light_activity(resting_bmr), "moderate" : get_moderate_activity(resting_bmr), "active" : get_very_active(resting_bmr)}
+    if user_activity_lvl == "sedentary":
+        print("You need to eat " + str(maintain["sedentary"]) + " calories a day to maintain your current weight")
+    if user_activity_lvl == "light":
+        print("You need to eat " + str(maintain["light"]) + " calories a day to maintain your current weight")
+    if user_activity_lvl == "moderate":
+        print("You need to eat " + str(maintain["moderate"]) + " calories a day to maintain your current weight")
+    if user_activity_lvl == "active":
+        print("You need to eat " + str(maintain["active"]) + " calories a day to maintain your current weight")
+
+# ask user sex, rule out incorrect options
+def sex():    
+    sexes = ["male","female","M","F","f","m","Male","Female"]
+    while True:
+        sex = str(input("Do you identify as male or female? "))
+        while sex not in sexes:
+            sex = str(input("Please enter either 'male' or 'female' "))
+        else:
+            return sex
+            break
+
+#ask user weight in pounds
+def get_weight():
+    weight_lbs = float(input("Enter your weight in pounds: "))
+    while weight_lbs <= 0:
+        weight_lbs = float(input("Invalid input. Please enter your weight in pounds: "))
+    else:
+        return weight_lbs
+
+#ask user height in inches
+def get_height():
+    height_inch = float(input("Enter your height in inches: "))
+    while height_inch <= 0:
+        height_inch = float(input("Invalid input. Please enter your height in inches: "))
+    else:
+        return height_inch
+
+#ask user age in yrs
+def get_age():
+    age_yrs = int(input("Enter your age in years: "))
+    while age_yrs <= 0:
+        age_yrs = int(input("Invalid Input. Please enter your age in years: "))
+    else:
+        return age_yrs
+
+#bmr calculations for male or female
+def calculate_bmr(gender, weight, height, age):
+    male = ["male", "M" , "m", "Male"]
+    female = ["female", "F", "f", "Female"]
+    if gender == female:
+        women = 655 + (4.35 * weight) + (4.7 * height) - (4.7 * age)
+        return int(women)
+    else:
+        men = 66 + (6.3 * weight) + (12.9 * height) - (6.8 * age)
+        return int(men)
+
+#get user weekly activity levels        
+def get_user_activity():
+    activity_lvl = ["sedentary", "light", "moderate", "active"]
+    while True:
+        user_lvl = str(input("\nWhat is your activity level?\n\nSedentary is little to no exercise.\nLightly active is 1 - 3 days/week.\nModerately active is 3 - 5 days/week.\nVery active is 6 - 7 days/week.\n\nPlease enter: 'sedentary', 'light', 'moderate',  or 'active' "))
+        while user_lvl not in activity_lvl:
+            user_lvl = str(input( "Invalid input. Please enter: 'sedentary', 'light', 'moderate',  or 'active' "))
+        else:
+            return user_lvl
+            break
+
+#pull resting bmr & multiply it for sedentary lvls
+def get_sedentary(resting_bmr):
+    sedentary = resting_bmr * 1.2
+    return sedentary
+
+def get_light_activity(resting_bmr):
+    light = resting_bmr * 1.375
+    return light
+
+def get_moderate_activity(resting_bmr):
+    moderate = resting_bmr * 1.55
+    return moderate
+
+def get_very_active(resting_bmr):
+    active = resting_bmr * 1.725
+    return active
+
+
+if __name__ == '__main__':
+    main()
